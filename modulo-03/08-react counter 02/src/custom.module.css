@@ -1,0 +1,25 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.stateExample {
+  max-width: 450px;
+  max-width: 450px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 10px;
+}
+
+.counter {
+  max-width: 450px;
+  max-width: 450px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 10px;
+}

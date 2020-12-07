@@ -1,0 +1,14 @@
+2020-10-14T12:20:28.902Z [my-app] error: Error log
+2020-10-14T12:20:28.903Z [my-app] warn: Warn log
+2020-10-14T12:20:28.903Z [my-app] info: Info log
+2020-10-14T12:20:28.903Z [my-app] verbose: Verbose log
+2020-10-14T12:20:28.903Z [my-app] debug: Debug log
+2020-10-14T12:20:28.903Z [my-app] silly: Silly log
+2020-10-14T12:20:28.903Z [my-app] info: hello with parameter!
+2020-10-14T12:22:06.641Z [my-app] error: Error log
+2020-10-14T12:22:06.642Z [my-app] warn: Warn log
+2020-10-14T12:22:06.642Z [my-app] info: Info log
+2020-10-14T12:22:06.642Z [my-app] verbose: Verbose log
+2020-10-14T12:22:06.642Z [my-app] debug: Debug log
+2020-10-14T12:22:06.642Z [my-app] silly: Silly log
+2020-10-14T12:22:06.642Z [my-app] info: hello with parameter!

@@ -1,0 +1,151 @@
+GIT
+o git e um Sistema de controle de versao distribuido, version control service (VCS).
+
+GITHUB
+plataforma ou rede social de desenvolvedores, onde armazenamos nossos codigos/projetos em um repositorio remoto com o controle de versao de codigo de cada projeto.
+
+
+#CONFIGURACAO INICIAL
+baixe o git e instale em seu sistema operacional atraves do link https://git-scm.com
+
+$ git config --system user.name "USER_NAME" user.email "USER_EMAIL"
+Cria uma configuracao de sistema para todos os usuarios, configuracao de identidade global para todos os usuarios do sistema operacional, com este comando voce ira iniciar uma configuracao de dados de acesso como nome, email, senha e etc...
+
+$ git config --global user.name "USER_NAME" user.email "USER_EMAIL"
+Cria uma configuracao de usuario, configuracao de identidade apenas para um usuario especifico do sistema operacional, com este comando voce ira iniciar uma configuracao de dados de acesso com nome, email, senha e etc...
+
+$ git config --local user.name "USER_NAME" user.email "USER_EMAIL"
+Cria uma configuracao de projeto, configuracao de identidade apenas para um projeto especifico, com este comando voce ira iniciar uma configuracao de dados de acesso com nome, email, senha e etc...
+
+$ git config --global core.editor "DIRECTORY_EDITOR"
+comando para voce configurar/alterar o editor de texto default do seu git.
+
+$ git config --list --show-origin
+comando para voce visualizar onde esta armazenado o arquivo de configuracao.
+
+$ git config --list
+comando para visuzalizar a configuracao.
+
+abaixo segue uma sequencia de comandos que editam as configuracoes de cores do seu git
+$ git config --global color.ui auto
+$ git config --global color.diff auto
+$ git config --global color.status auto
+$ git config --global color.branch auto
+
+
+
+
+#FLUXO DE OPERACOES
+O fluxo de operacoes do git e organizado em 4 estruturas, 
+ - primeiro no "Workspace" que basicamente e a pasta onde esta todos nossos arquivos do nosso projeto.
+ - segundo o "Index" que e uma area temporaria chamamos de stage area onde fica armazenado os arquivos que modificamos, neste lugar ficam arquivos modificados, exluidos , adicionados e etc, ficam armazenados neste lugar antes de chegar no repositorio local (head).
+ - terceiro "Head" repositorio local, cada pessoa que utiliza seu controle de versao do projeto tem seu repositorio local que chamamos de "head, dentro do head temos o workspace que e a pasta com o projeto do qual estamos trabalhando e podemos ter varias versoes deste projeto.
+ - Quarto Repositorio Remoto.
+ 
+  
+$ git add . 
+transfere todos os arquivos para a area temporaria (index).
+ 
+$ git commit -a "meu primeiro commit"
+transfere todas as modificacoes feitas nos arquivos para o repositorio local (head).
+
+$ git checkout "VERSION_CODE"
+Retorna para uma versao especifica do projeto
+
+$ git diff "VERSION_CODE"
+Comando para verificar o que esta modificado nos arquivos comparando a versao do workspace com o do repositorio local.
+
+$ git push
+transfere os arquivos do repositorio local para o repositorio remoto no seu github
+
+$ git pull
+Transfere todos os arquivos do repositorio remoto para seu repositorio local e workspace do projeto.
+
+$ git fetch
+Pega todos os arquivos do repositorio remoto e atualiza o repositorio local.
+
+
+
+
+
+#PRINCIPAIS COMANDOS DO GIT e BOAS PRATICAS
+* Em todos os projetos voce pode criar um arquivo com o nome ".gitignore" dentro deste arquivo voce pode declarar qual diretorio e arquivos voce deseja que o git ignore e nao faca upload para seu repositorio remoto.
+
+* Importante que antes de qualquer commit voce faca um git pull do seu repositorio remoto para atualizar o repositorio local quando voce esta trabalhando em equipe, dessa forma voce evita conflitos no repositorio remoto, corrigindo qualquer possivel conflito antes de fazer um push.
+
+
+$ git init
+Inicia um repositorio vazio no seu projeto
+
+$ git add * 
+Transfere todos os arquivos criados/modificados do seu projeto para a area temporaria (stage area "index") antes de trasferir para seu repositorio remoto.
+
+$ git add -A 
+transfere apenas os arquivos modificados para a area temporaria (stage area "index")
+
+$ git commit -m "COMMIT_DESCRIPTION"
+Este faz uma transferencia dos arquivos modificados para seu repositorio local, ou seja ele transfere da sua area temporaria (INDEX) para o repositorio local (HEAD).
+
+$ git commit --amend -m "UPDATE_COMMIT_DESCRIPTION"
+caso voce tenha feito um commit e nao gostou da sua descricao na mensagem, antes de fazer um push voce pode modificiar esta mensagem utilizando este comando.
+
+$ git status
+Verifica os arquivos que voce fez um commit e que estao na sua area temporaria.
+
+$ git clone "REPOSITORY_ADDRESS"
+com este comando e possivel voce clonar um repositorio remoto para sua maquina.
+
+$ git remote add origin "REPOSITORY_ADDRESS"
+com este comando voce pode adicionar em sua workspace a conexao de um repositorio remoto, para futuramente fazer upload do seu repositorio local para o repositorio remoto que voce criou no seu github, lembre-se de que caso seu workspace/projeto for novo e vazio execute nele o comando "$ git initi" para iniciar um repositorio local vazio.
+
+$ git branch
+Lista as ramificacoes (branch) existentes no seu projeto.
+
+$ git checkout -b "BRANCH_NAME"
+cria uma nova branch (ramificacao) no seu projeto.
+
+$ git checkout "BRANCH_NAME"
+Com este comando voce vai para uma determinada versao do seu projeto ou determinada ramificacao (branch) do projeto.
+
+$ git merge "BRANCH_NAME"
+com este comando todas as modificacoes que voce fez em determinada ramificacao (branch) do seu projeto, pode ser incluida na ramificacao atual, para isto voce tem que se atentar em estar na sua ramificacao master, ou aquela que voce deseja fazer o merge (incluir), utilize o comando "git checkout BRANCH_NAME" para ir na sua ramificacao (branch) desejada antes de executar este comando do merge.
+
+$ git branch -d "BRANCH_NAME"
+este comando voce deleta uma ramificacao (brach) do seu projeto.
+
+$ git log
+este comando lista todos os commits do seu branch (ramificacao).
+
+$ git fetch 
+Atualiza/transfere todos os branchs existentes no repositorio remoto para seu repositorio local, necessario fazer um "$ git pull" logo apos executar este comando.
+
+$ git pull
+Transfere seus arquivos do seu projeto no respositorio remoto para seu repositorio local sincronizando/atualizando seu workspace e vice-versa.
+
+$ git push -u origin master
+Transfere e atualiza seus arquivos criados/modificados do seu repositorio local para seu repositorio remoto.
+
+
+#VARIAVIES DE AMBIENTE GITHUB
+Podemos definir e guardar em variavies de ambiente informacoes de uso global em um projeto, como por exemplo usuario de banco de dados, senha de banco de dados, porta de conexao, nome de servidor e etc... essas variaveis de ambiente sao armazenadas em uma variavel global chamada "process.env"
+
+um exemplo de projeto utilizando javascript com nodeJS, inicia com "$ npm init -y" e instale o pacote "$ npm install dotenv", em seguida crie na raiz do projeto um arquivo exatamente ".env" dentro deste arquivo colocar o seguinte conteudo:
+USERDB="myUserTest"
+PWDDB="123456"
+
+Para utilizar o conteudo desta variavel por exemplo vamos colocar um exemplo com console.log() para exibir o conteudo, crie um arquivo "index.js" e dentro dele:
+
+require('dotenv').config();
+console.log(process.env.USERDB);
+
+
+
+
+
+
+
+
+
+
+
+

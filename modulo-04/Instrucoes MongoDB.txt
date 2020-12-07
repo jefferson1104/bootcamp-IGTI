@@ -1,0 +1,383 @@
+##TIPOS DE BANCOS DE DADOS
+SQL - relacional, processamento de transacoes, concorrencia, consistencia e baixa latencia.
+NoSQL - nao relacional, alta performance, alta escalabilidade
+
+
+
+##ESTRUTURA SQL x NoSQL
+exemplo PostgreSQL e MongoDB
+PostgreSQL - Banco de dados, Tabelas, Linhas, Colunas
+MongoDB - Banco de dados, Colecoes, Documentos, Campos
+
+
+
+##INSTALACAO MONGODB
+1 - criar o container
+$ docker run --name some-mongo -p 27017:27017 -d mongo
+
+2 - instalação mongo compass
+- faça o download (https://www.mongodb.com/products/compass) link (Links para um site externo.) da versão .deb
+- vá até a pasta de Downloads
+- execute o comando "sudo dpkg --install nome do arquivo"
+
+3 - conectar no mongo
+- abra o mongo compass e selecione a opção "Fill in connection fields individually"
+- verifique se o hostname esta localhost e se a porta esta 27017
+- agora só conectar ;)
+
+4-alguns comandos docker sobre o container
+- listando containers em execucao: $ sudo docker container ls
+- listando todos os containers: $ sudo docker container ls -a
+- entrando no shell do container: $ sudo docker exec -it {ID_CONTAINER} bash
+
+
+
+## PRINCIPAIS COMANDOS MONGODB
+1 - Acessar o banco de dados: 
+    $ mongo --host localhost:27017
+    
+2 - Verificar lista de comandos dentro do banco de dados:
+    > db.help()
+    
+3 - Verificar todas as bases de dados existentes: 
+    > show dbs
+    
+4 - Verificar base atual: 
+    > db 
+    
+5 - Acessar ou criar uma base de dados: 
+   > use nameDataBase
+   
+   - OBS: com este comando voce acessa caso existir ou cria caso nao existir uma base de dados,
+          o mongo db de fato so cria a base quando apos voce executar o "use nomeBaseDeDados",
+	  e criar uma colecao ou documento dentro dela.
+	  
+6 - Deletando uma base de dados, acesse a base de dados: > db.dropDatabase()	
+	 
+	 
+	 
+## COLECOES MONGODB, PRINCIPAIS COMANDOS 	 
+E necessario estar dentro da base de dados que voce deseja criar a collection, para isso lembre so comando "use nameDataBase"
+
+1 - Criando uma collection
+    > db.createCollection("nameCollection")
+    
+    - OBS: e possivel inserir parametros caso desejar, por exemplo colocar dentro dessa collection um limite de document a ser inserido dentro 
+    da collection, o tamanho maximo dessa colection como 10mb, 100gb e ect.. usando o comando dessa forma "db.createCollection("nameCollection", {parametros})".
+    
+    conheca alguns parametros:
+     - capped: Boolean (Opcional) Se verdadeiro(true), habilita o capped collection é uma coleção de tamanho fixo estabelecido, 
+               o qual sobrescreve as entradas mais antigas quando se é atingido o tamanho máximo. Se você especificar verdadeiro, 
+               você também precisa especificar tamanho como parâmetro. 
+                          
+     - autoIndexID: Boolean (Opcional) Se verdadeiro(true), automaticamente criará um índice para o campo _id. Valor padrão é falso.
+     
+     - size: number (Opcional) Especifica um tamanho maximo em bytes para o capped collection. Se o capped for verdadeiro, então é 
+             necessário também especificar este campo.
+             
+     - max: number (Opcional) Especifica o número máximo de documentos permitidos no capped collection.
+    
+    veja um exemplo de criacao de uma collection com esses parametros:
+	> db.createCollection("mycollection", { capped: true, autoIndexID : true, size: 6142800, max: 10000 })
+
+
+   - OUTRA FORMA: uma outra forma de criar uma collection e tambem ja inserindo os dados por exemplo veja o comando abaixo:
+   	> db.students.insert({"name": "Jefferson"})
+
+
+2 - Excluindo uma collection
+    > db.nameCollection.drop()
+    
+3 - exibindo as collections da base de dados
+    > show collections
+
+
+
+
+##MONGODB INSERIR DOCUMENTOS (create)
+1 - Inserindo um unico documento na nossa base de dados:
+    > db.NOMECOLLECTION.insertOne({key: "value"});
+    ex: db.student.insertOne({"name": "Joel Soares"});
+
+2 - Inserido multiplos documentos na nossa base de dados:
+    > db.NOMECOLLECTION.insertMany([{{key: "value"}}, {{key2: "value2"}, {key3: "value3"}}]);
+    ex: db.student.insertMany([{name: "Jefferson Soares", subject: "Matematica", type: "Trabalho Pratico", value: 15.4}, {name: "Arthur Lopes", subject: "Portugues", type: "Prova Final", value: 23.8}]);
+
+3 - Outro comando que permite inserir multiplos documentos na nossa base de dados:
+    > db.NOMECOLLECTION.insert([{key: "value"}, {key2: "value2"}]);
+    ex: db.student.insert([{name: "Kelly Ramos", subject: "Historia", type: "Trabalho Pratico", value: 20.2}, {name: "Renato Ramos", subject: "Artes", type: "Prova Final", value: 40.8}]);
+
+
+
+##MONGODB CONSULTAR DOCUMENTOS (retrieve)
+1 - Consultando todos os dados dentro da collection:
+    > db.NOMECOLLECTION.find();
+    ex: db.student.find();
+    
+2 - Consultando os dados e apresentando de uma forma mais organizado utilizando o ".pretty()"
+    > db.NOMECOLLECTION.find().pretty();
+    ex: db.student.find().pretty();
+
+
+####comandos utilizando o projection para definir quais campos do documento queremos consultar
+3 - Consultando os dados com uma projection, para definir quais campos do documento queremos exibir na consulta, no exemplo abaixo eu setei o Object ID como 0 para nao ser exibido :
+    > db.NOMECOLLECTION.find(query, projection);
+    ex: db.student.find({}, {_id: 0, name: 1, value: 1});
+    
+4 - Consultando com um limite de resultados utilizando o ".limit(n)"
+    > db.NOMECOLLECTION.find(query, projection).limit(n);
+    ex: db.student.find({}, {_id: 0, name: 1, value: 1}).limit(4);
+    
+5 - Consultando com um limite de resultados e pulando campos utilizando o ".skip(n)"    
+    > db.NOMECOLLECTION.find(query, projection).limit(n).skip(n);
+    ex: db.student.find({}, {_id: 0, name: 1, value: 1}).limit(4).skip(1);
+    
+6 - Consultando com uma ordenacao utilizando o ".sort({field:1})" para uma ordenacao crescente ou ".sort({field:-1})" para ordenar de forma decrescente:    
+    > db.NOMECOLLECTION.find(query, projection).sort({field:1});
+    > db.NOMECOLLECTION.find(query, projection).sort({field:-1});
+    ex: db.student.find({}, {_id: 0, name: 1, value: 1}).sort({name:1});
+    ex: db.student.find({}, {_id: 0, name: 1, value: 1}).sort({name:-1});
+
+7 - Consultando apenas 1 unico registro onde voce pode definir com querys e projections o que quer buscar, ou sem definir ele traz o primeiro resultado em ordem natural da base de dados
+    > db.NOMECOLLECTION.findOne(query, projection);
+    > db.NOMECOLLECTION.findOne();
+    ex: db.student.findOne({}, {_id: 0, name: 0, value: 1});
+    ex: db.student.findOne();
+
+
+####comandos utilizando query para filtros
+8 - Consultando registros com a utilizacao da query para fazer um filtro na busca:
+    > db.NOMECOLLECTION.find(query, projection);
+    ex: db.student.find({subject: "Portugues"}, {_id:0}).pretty();
+    
+
+9 - Operadores logicos:
+     - Operador AND retorna todos os documentos da consulta que atende os criterios definidos na query
+        $and
+        > db.NOMECOLLECTION.find({$and:[{query1}, {query2}]}, {projection});
+        ex: db.student.find({$and:[{subject: "Portugues"}, {type: "Prova Final"}]}, {_id:0}).pretty();
+
+     - Operador NOT retorna os documentos da consulta invertidos dos criterios definidos na query
+
+     - Operador NOR retorna todos os documentos que nao atende os criterios definidos na query
+	 $nor     
+	 > db.NOMECOLLECTION.find({$nor:[{query1}, {query2}]}, {projection});
+	 ex: db.student.find({$nor:[{subject: "Portugues"}, {type: "Prova Final"}]}, {_id:0}).pretty();
+        
+     - Operador OR retorna todos os documentos da consulta que atende um ou outro criterio definido na query
+	$or
+	> db.NOMECOLLECTION.find({$or:[{query1}, {query2}]}, {projection});
+	ex: db.student.find({$or:[{subject: "Portugues"}, {subject: "Matematica"}]}, {_id:0}).pretty();
+
+10 - Operadores de comparacao
+      - Operador EQUAL (igual)
+        $eq
+        > db.NOMECOLLECTION.find({field: {$eq:value}}, {projection});
+        ex01: db.student.find({name: {$eq: "Arthur Lopes"}}, {_id:0}).pretty();
+        ex02: db.student.find({value: {$eq: 23.8}}, {_id:0}).pretty();
+
+      - Operador GREATHER THAN (maior que) 
+        $gt
+        > db.NOMECOLLECTION.find({field: {$gt:n}}, {projection});
+        ex: db.student.find({value: {$gt:20.2}}, {_id:0}).pretty();     
+
+      - Operador GREATHER THAN EQUAL (maior ou igual) 
+        $gte
+        > db.NOMECOLLECTION.find({field: {$gte:n}}, {projection});
+        ex: db.student.find({value: {$gte: 40.5}}, {_id:0}).pretty();
+
+      - Operador PERTENCE (pertence a que)  
+        $in
+        > db.NOMECOLLECTION.find({field: {$in:["value1", "value2"]}}, {projection});
+        ex: db.student.find({subject: {$in:["Portugues", "Ciencias"]}}, {_id:0}).pretty();
+
+      - Operador LESS THAN  (menor que)  
+        $lt
+        > db.NOMECOLLECTION.find({field: {$lt:n}}, {projection});
+        ex: db.student.find({value: {$lt:20}}, {_id:0}).pretty();
+
+      - Operador LESS THAN EQUAL (menor ou igual)  
+        $lte
+        > db.NOMECOLLECTION.find({field: {$lte:n}}, {projection});
+        ex: db.student.find({value: {$lte:20.2}}, {_id:0}).pretty();
+
+      - Operador NOT EQUAL (nao e igual)  
+        $ne
+        > db.NOMECOLLECTION.find({field: {$ne:value}}, {projection});
+        ex01: db.student.find({type: {$ne: "Trabalho Pratico"}}, {_id:0}).pretty();
+        ex02: db.student.find({value: {$ne: 40.8}}, {_id:0}).pretty();
+
+      - Operador NOT PERTENCE (nao pertence)  
+        $nin
+        > db.NOMECOLLECTION.find({field: {$nin: ["value1", "value2"]}}, {projection});
+        ex: db.student.find({subject: {$nin: ["Portugues", "Matematica"]}}, {_id:0}).pretty();
+
+
+
+
+##MONGODB ATUALIZAR DOCUMENTOS (update)
+1 - Atualizando uma informacao com operador "$set", a sintaxe basica requer como parametros um filtro = "query", quais campos desejo fazer essa atualizacao = "update" e alguns outros parametros opcionais = "options", utilizamos no parametro update o $set para fazer essa atualizacao:
+    > db.NOMECOLLECTION.updateOne(query, update, options);
+
+    ex: abaixo vou colocar um comando de exemplo, onde definimos no parametro query que queremos atualizar um documento onde o "name" e igual a  "Barack Obama" e o "subject" e igual a "Portugues", setando no parametro update um "type" igual a "Prova Final"
+    > db.student.updateOne({name: "Barack Obama", subject: "Portugues"}, {$set: {type: "Prova Final"}});
+    
+2 - Atualizando uma informacao com operador logico $inc, ele atualiza um campo de um documento incrementando o valor desejado no valor ja existente:
+    ex: db.student.updateOne({name: "Renato Ramos", subject: "Artes"}, {$inc: {value: 40.8}});
+    
+3 - Atualizando varias informacoes simultaneamente, ele utiliza os mesmos parametros das opcoes anteriores e os mesmos operadores logicos:
+    > db.NOMECOLLECTION.updateMany(query, update, options);    
+    ex: db.student.updateMany({subject: "Matematica", type: "Trabalho Pratico"}, {$set: {value: 10}});
+
+4 - Atualizando documento incluindo novos campos, no exemplo abaixo vamos incluir os campos "lastModified" e "timestamp" e tambem utilizar o operador logico $currentDate e $type colocando o tipo do campo timestamp como timestamp :
+    Ex: > db.student.updateMany({}, {$currentDate: {lastModified:true, timestamp: {$type: "timestamp"}}});
+
+5 - Atualizando documento removendo um campo com o atributo $unset:
+    ex: db.student.updateMany({}, {$unset: {timestamp:1}});	
+
+6 - Atualizando todo um documento sobrescrevendo os valores deles por novos valores, no exemplo abaixo vamos utilizar o id de um documento para identificar ele na query e setar todos os novos valores dos campos, para isso tambem vamos ver no exemplo como externalizar o ID para poder utilziar ele na query:
+    ex: > db.student.replaceOne({_id: ObjectId("5fa447e3212a7b1d0f8bb332")}, {name: "Jhon Doe", subject: "Fisica", type: "Profa Final", value: 35.5, lastModified:"$NOW"});	
+
+
+
+##MONGODB DELETAR DOCUMENTOS (delete)
+1 - Deletando apenas um documento
+    > db.NAMECOLLECTION.deleteOne(query);
+    ex: > db.student.deleteOne({_id: ObjectId("5fa477a61dde7a21ddb6b522")});
+
+2 - Deletando varios documentos
+    > db.NAMECOLLECTION.deleteMany(query)
+    ex: db.student.deleteMany({subject: "Matematica"});
+
+
+
+
+##MONGODB COMANDOS EM MASSA (BulkWrite)
+1 - Com a opcao de comandos em massa, podemos executar varias operacoes de uma vez so sem precisar ficar executando uma por uma, para isto utilizamos o BulkWrite, utilizamos nele um array [] e OPTIONS como parametros para definir que sua sequencia de execucao seja executada paralelamente ou em ordem, veja abaixo exemplos de sua sintaxe:
+    > db.NAMECOLLECTION.bulkWrite([operator1, operator2, operator3...], options);
+    
+    NOTE: Por default o comando e executado em ordem, porem pode ser colocado de forma parela nas options, exemplo voce pode apos o array acrescentar no comando o  "{ordered: false}" para que seja executado em paralelo porem muito cuidado ao utilizar este recurso.
+    
+    exemplo completo:
+	db.student.bulkWrite([ 
+	  { insertOne: { 
+	    "document": {
+	      name: "Jhon Trhee",
+	      subject: "Quimica",
+	      type: "Trabalho Pratico",
+	      value: 20.5,
+	      timestamp: new Date()
+	    }
+	  }},
+	  { insertOne: { 
+	    "document": {
+	      name: "Jhon Four",
+	      subject: "Artes",
+	      type: "Prova Final",
+	      value: 30.4,
+	      timestamp: new Date()
+	    }
+	  }},
+	  { updateOne: {
+	    "filter": {name: "Jhon Doe"},
+	    "update": {$set: {subject: "Ciencias"}}
+	  }},
+	  { deleteOne: {
+	    "filter": {name: "Kelly Ramos", type: "Trabalho Pratico", subject: "Historia"}
+	  }},
+	  { replaceOne: {
+	    "filter": {_id: ObjectId("5fa477a61dde7a21ddb6b51f")},
+	    "replacement": {name: "Jhon Five", subject: "Geografia", type: "Prova FInal", value: 10, lastModified: new Date()}
+	  }},
+	]);
+
+
+
+
+##MONGODB APRENDENDO SOBRE INDICES
+Os indices facilitam e melhoram a busca por documentos na sua collection, ou seja acelera a velocidade da sua consulta, com seus indices ordenados corretamente voce acelera/melhora a velocidade das operacoes.
+
+
+Quais os principais comandos?
+
+1 -  consultar todos os indices presentes na collection
+> db.COLLECTION.getIndexes();
+ex: db.student.getIndexes();
+
+2 - criando um indice para um determinado campo, para ordernar de forma crescente utilize "1", para decrescente utilize "-1"
+>db.COLLECTION.createIndex({field: 1});
+ex: db.student.createIndex({name: 1});
+
+3 - excluindo um indice da collection, existem tres opcoes
+
+excluindo pelo nome do indice
+> db.COLLECTION.dropIndex("name_1");
+ex: db.student.dropIndex("name_1");
+
+excluindo pelo nome do campo que foi utilizado para criar o indice
+> db.COLLECTION.dropIndex({field: -1});
+ex: db.student.dropIndex({name: 1});
+
+excluindo todos os indices existentes na collection exceto o "_id"
+> db.COLLECTION.dropIndexes();
+ex: db.student.dropIndexes();
+
+
+4 -  criando um indice do tipo text para fazer buscas em textos dentro dos documentos da collection (ele permite pesquisa por textos em determinados campos com dados do tipo string)
+> db.COLLECTION.createIndex({field:"text"});
+ex: db.student.createIndex({subject: "text"});
+exemplo para fazer uma busca nesse indice:
+> db.student.find({$text: {$search: "Ciencias"}});
+> db.student.find({$text: {$search: "Ciencias"}}, {name:1});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

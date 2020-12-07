@@ -1,0 +1,57 @@
+HEROKU (heroku.com)
+Plataforma as a service para a publicacao/hospedagem de aplicacoes, esta plataforma possui integracao com o git, devido a isto podemos ter no heroku uma integracao continua.
+
+Para utilizar este servico de plataforma em nuvem, e necessario criar uma conta, acesse https://heroku.com e clique em Sign Up para criar sua conta.
+
+Para fazer o deploy/implantacao da sua aplicacao no heroku, primeiro certifique-se de que seu projeto ja esta em um repositorio no github alem de estar em um workspace da sua maquina local.
+
+
+
+PROCFILE
+Crie um arquivo chamado "Procfile" ele e o resposavel por definir os comandos onde sera executado no heroku, ou seja dentro deste arquivo chamado Procfile voce coloca o comando de inicializacao do seu app.
+
+exemplo de conteudo que deve ser inserido no arquivo Procfile:
+web: node -r dotenv/config --experimental-modules app.js
+
+Importante lembrar que se nao tiver este arquivo criado no seu projeto com os comandos que voce deseja executar no heroku dentro do arquivo Procfile, automaticamente nao existindo este arquivo o heroku vai executar os comandos de scripts que existem dentro do seu package.json
+
+
+
+HEROKU COMAND LINE INTERFACE (CLI)
+Baixe e instale o heroku CLI em https://devcenter.heroku.com/articles/heroku-cli
+
+$ heroku login
+Comando para fazer login com seus dados de acesso da sua conta no heroku.com
+
+$ heroku create
+Prepara um nome e um endereco para o deploy da nossa aplicacao no heroku
+
+$ heroku apps:rename NOME_DA_APLICACAO
+Com este comando e possivel renomear o nome da sua aplicacao que e criado quando voce executa o comando "$ heroku create".
+
+$ git remote -v
+Exibe os repositorios do git e do heroku
+
+$ git push heroku main
+comando do git para fazer o upload dos arquivos do seu projeto no heroku, automaticamente este comando faz com o que o heroku faca o build e deploy da sua aplicacao na plataforma.
+
+$ heroku logs --tail
+Retorna os logs do heroku.
+
+
+
+INTEGRACAO CONTINUA
+O processo de integracao continua faz com que o proprio github faca o processo de deploy no heroku assim entao toda vez que atualizar o codigo/projeto e subir no repositorio do github ele automaticamente atualiza a aplicacao no heroku.
+
+Toda vez que voce atualizar seu codigo na sua maquina local e subir a atualizacao desse codigo para seu repositorio no github automaticamente sera feito um novo build da sua aplicacao no heroku.
+
+Para isto acontecer, temos que ir ate a aplicacao que desejamos habilitar o deploy automatico, em seguida temos que conectar nossa conta do github no no heroku e tambem habilitar o deploy automatico, siga o exemplo abaixo:
+
+
+
+
+
+
+
+
+

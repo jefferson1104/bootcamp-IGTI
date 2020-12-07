@@ -1,0 +1,12 @@
+{
+  "name": "modulos",
+  "version": "1.0.0",
+  "description": "<p>  Um modulo no nodejs e o mesmo que uma biblioteca no javascript, e um conjunto de funcoes que podem ser incluidas em uma aplicacao, o nodejs segue o commonjs, uma especificacao de ecossistemas para o javascript. </p>",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "type": "module"
+}
